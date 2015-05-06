@@ -13,3 +13,7 @@
 0:0:0:0:0:0:0:1 - - [06/May/2015:12:44:13 +0300] "GET /app/mvc/department/ HTTP/1.1" 200 19 http-bio-8080-exec-1 57
 0:0:0:0:0:0:0:1 - - [06/May/2015:12:44:27 +0300] "GET /app/mvc/departments/ HTTP/1.1" 200 14 http-bio-8080-exec-2 3
 0:0:0:0:0:0:0:1 - - [06/May/2015:13:15:59 +0300] "GET /app/mvc/departments/ HTTP/1.1" 200 14 http-bio-8080-exec-1 49
+0:0:0:0:0:0:0:1 - - [06/May/2015:21:21:51 +0300] "GET /app/mvc/departments/ HTTP/1.1" 200 14 http-bio-8080-exec-1 73
+0:0:0:0:0:0:0:1 - - [06/May/2015:21:22:00 +0300] "GET /app/mvc/jobs/ HTTP/1.1" 200 10 http-bio-8080-exec-3 4
+0:0:0:0:0:0:0:1 - - [06/May/2015:21:22:07 +0300] "GET /app/mvc/location/ HTTP/1.1" 200 19 http-bio-8080-exec-4 2
+0:0:0:0:0:0:0:1 - - [06/May/2015:21:22:12 +0300] "GET /app/mvc/locations/ HTTP/1.1" 200 15 http-bio-8080-exec-6 4

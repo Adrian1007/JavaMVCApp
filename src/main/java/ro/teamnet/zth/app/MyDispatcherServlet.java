@@ -4,6 +4,8 @@ import ro.teamnet.zth.api.annotations.MyController;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
 import ro.teamnet.zth.app.controller.DepartmentController;
 import ro.teamnet.zth.app.controller.EmployeeController;
+import ro.teamnet.zth.app.controller.JobsController;
+import ro.teamnet.zth.app.controller.LocationController;
 import ro.teamnet.zth.fmk.AnnotationScanUtils;
 import ro.teamnet.zth.fmk.MethodAttributes;
 
@@ -111,11 +113,25 @@ public class MyDispatcherServlet extends HttpServlet {
 
 
         }
+
         if(path.startsWith("/departments" )) {
             DepartmentController departmentController = new DepartmentController();
             String allDepartments = departmentController.getAllDepartments();
             return allDepartments;
         }
+
+        if(path.startsWith("/jobs")) {
+            JobsController jobsController = new JobsController();
+            String allJobs = jobsController.getAllJobs();
+            return allJobs;
+        }
+
+        if(path.startsWith("/locations")) {
+            LocationController locationController = new LocationController();
+            String allLocations = locationController.getAllLocations();
+            return allLocations;
+        }
+
         throw new DispatchException();
         //return o;
         //return "Hello";
