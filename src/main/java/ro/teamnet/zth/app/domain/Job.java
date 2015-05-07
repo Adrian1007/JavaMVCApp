@@ -4,6 +4,8 @@ import ro.teamnet.zth.api.annotations.Column;
 import ro.teamnet.zth.api.annotations.Id;
 import ro.teamnet.zth.api.annotations.Table;
 
+import java.math.BigDecimal;
+
 @Table(name = "jobs")
 public class Job {
 

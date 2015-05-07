@@ -1,11 +1,10 @@
 package ro.teamnet.zth.app;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 import ro.teamnet.zth.api.annotations.MyController;
+import ro.teamnet.zth.api.annotations.MyParamRequest;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
-import ro.teamnet.zth.app.controller.DepartmentController;
-import ro.teamnet.zth.app.controller.EmployeeController;
-import ro.teamnet.zth.app.controller.JobsController;
-import ro.teamnet.zth.app.controller.LocationController;
 import ro.teamnet.zth.fmk.AnnotationScanUtils;
 import ro.teamnet.zth.fmk.MethodAttributes;
 
@@ -16,8 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,7 +57,7 @@ public class MyDispatcherServlet extends HttpServlet {
                         methodAttributes.setControllerClass(controller.getName());
                         methodAttributes.setMethodName(controllerMethod.getName());
                         methodAttributes.setMethodType(myRequestMethod.methodType());
-
+                        methodAttributes.setMethodParameterTypes(controllerMethod.getParameterTypes());
                         allowedMethods.put(key, methodAttributes);
                     }
                 }
@@ -91,6 +93,16 @@ public class MyDispatcherServlet extends HttpServlet {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 
@@ -99,10 +111,38 @@ public class MyDispatcherServlet extends HttpServlet {
         out.printf("Nu s-a mapat URL-ul");
     }
 
-    private Object dispatch(HttpServletRequest req, HttpServletResponse resp) {
+    private Object dispatch(HttpServletRequest req, HttpServletResponse resp) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         String path = req.getPathInfo();
+        
+        MethodAttributes methodAttributes =  allowedMethods.get(path);
+        if (methodAttributes != null) {
 
+            String controllerClass = methodAttributes.getControllerClass();
+            Class<?> controller = Class.forName(controllerClass);
+            Object newControllerInstance = controller.newInstance();
+
+
+            String methodName = methodAttributes.getMethodName();
+            Method method = controller.getMethod(methodName, methodAttributes.getMethodParameterTypes());
+            Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+            if(parameterAnnotations.length > 0) {
+                MyParamRequest annotation = (MyParamRequest) parameterAnnotations[0][0];
+                List<String> methodParamsValues = new ArrayList<>();
+                String valOfParanName = req.getParameter(annotation.paranName());
+                methodParamsValues.add(valOfParanName);
+                Object reply = method.invoke(newControllerInstance, (String[]) methodParamsValues.toArray(new String[0]));
+                return reply;
+            }
+            else {
+                return method.invoke(newControllerInstance);
+            }
+
+        }
+        
+        
+        
         Object o = null;
+        /*
         if(path.startsWith("/employees")) {
 
             EmployeeController employeeController = new EmployeeController();
@@ -131,7 +171,7 @@ public class MyDispatcherServlet extends HttpServlet {
             String allLocations = locationController.getAllLocations();
             return allLocations;
         }
-
+        */
         throw new DispatchException();
         //return o;
         //return "Hello";
@@ -141,6 +181,9 @@ public class MyDispatcherServlet extends HttpServlet {
 
     private void reply(Object r, HttpServletRequest req, HttpServletResponse resp) throws IOException {
             PrintWriter out = resp.getWriter();
-            out.printf(r.toString());
+            //out.printf(r.toString());
+            ObjectWriter mapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            String json = mapper.writeValueAsString(r);
+            out.write(json);
     }
 }

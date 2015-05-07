@@ -33,8 +33,8 @@ public class Employee {
     @Column(name = "SALARY")
     private BigDecimal salary;
 
-    @Column(name = "COMMISSION_PCT")
-    private BigDecimal commissionPct;
+    @Column(name = "COMMISION_PCT")
+    private BigDecimal commisionPct;
 
     @Column(name = "MANAGER_ID")
     private Integer managerId;
@@ -106,12 +106,12 @@ public class Employee {
         this.salary = salary;
     }
 
-    public BigDecimal getCommissionPct() {
-        return commissionPct;
+    public BigDecimal getCommisionPct() {
+        return commisionPct;
     }
 
-    public void setCommissionPct(BigDecimal commissionPct) {
-        this.commissionPct = commissionPct;
+    public void setCommisionPct(BigDecimal commisionPct) {
+        this.commisionPct = commisionPct;
     }
 
     public Integer getManagerId() {
@@ -141,7 +141,7 @@ public class Employee {
 
         Employee employee = (Employee) o;
 
-        if(commissionPct != null ? !commissionPct.equals(employee.commissionPct) : employee.commissionPct != null) {
+        if(commisionPct != null ? !commisionPct.equals(employee.commisionPct) : employee.commisionPct != null) {
             return false;
         }
         if(departmentId != null ? !departmentId.equals(employee.departmentId) : employee.departmentId != null) {
@@ -185,7 +185,7 @@ public class Employee {
         result = 31 * result + (hireDate != null ? hireDate.hashCode() : 0);
         result = 31 * result + (jobId != null ? jobId.hashCode() : 0);
         result = 31 * result + (salary != null ? salary.hashCode() : 0);
-        result = 31 * result + (commissionPct != null ? commissionPct.hashCode() : 0);
+        result = 31 * result + (commisionPct != null ? commisionPct.hashCode() : 0);
         result = 31 * result + (managerId != null ? managerId.hashCode() : 0);
         result = 31 * result + (departmentId != null ? departmentId.hashCode() : 0);
         return result;
